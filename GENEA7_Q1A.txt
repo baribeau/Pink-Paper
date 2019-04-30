@@ -1,0 +1,54 @@
+void writeRGB(TFileHandle fout, string paper, long redValue, long greenValue, long blueValue)
+{
+	writeTextPC(fout, paper);
+	writeCharPC(fout, ' ');
+	writeLongPC(fout, redValue);
+	writeCharPC(fout, ' ');
+	writeLongPC(fout, greenValue);
+	writeCharPC(fout, ' ');
+	writeLongPC(fout, blueValue);
+	writeEndlPC(fout);
+}
+
+task main()
+{
+	bool continue = true;
+	string colorPaper = "";
+	ofstream fout("Assgt7_Data.txt");
+	SensorType[S1] = sensorEV3_Color;
+	wait1Msec(50);
+	SensoMode[S1] = modeEV3Color_Color;
+	wait1Msec(50);
+
+	long redVal = 0, greenVal = 0, blueVal = 0;
+	getColorRGB(colorSensor, redVal, greenVal, blueVal);
+	redVal = blueVal = greenVal = 0;
+
+	while(continue)
+	{
+		while(!getButtonPress(buttonLeft) && !getButtonPress(buttonRight) && !getButtonPress(buttonEnter)) 
+		{}
+		if(getButtonPress(buttonEnter))
+			continue = false; 
+		else {
+			if(getButtonPress(buttonLeft))
+				colorPaper = "pink";
+			else if (getButtonPress(buttonRight))
+				colorPaper = "orange";
+	
+			while(getButtonPress(buttonAny)) {}
+			getColorRGB(colorSensor, redVal, greenVal, blueVal);
+			writeRGB(fout, colorPaper, redVal, greenVal, blueVal);
+			valueCount++;
+		}
+	}
+}
+
+
+
+
+
+
+
+
+

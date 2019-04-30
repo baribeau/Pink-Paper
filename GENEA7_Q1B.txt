@@ -1,0 +1,75 @@
+#include <iostream>
+#include <iomanip>
+#include <cmath>
+// include string library maybe? can't remember what it is
+
+int main()
+{
+	ifstream fin("Assgt7_Data.txt"); // Move file from rc-data directory to where this program can access it
+	if(!fin){
+		cout << "Error opening file" << endl;
+		return -1;
+	}
+
+	string paper = "";
+	long redVal = 0, greenVal = 0, blueVal = 0;
+	int Pcount = 0, Ocount = 0;
+	long PrTotal = 0, PgTotal = 0, PbTotal = 0, OrTotal = 0, OgTotal = 0, ObTotal = 0;
+	long PrAvg = 0, PgAvg = 0, PbAvg = 0, OrAvg = 0, OgAvg = 0, ObAvg = 0;
+	long PrMin = 10e100, PgMin = 10e100, PbMin = 10e100, OrMin = 10e100, OgMin = 10e100, ObMin = 10e100;
+	long PrMax = 0, PgMax = 0, PbMax = 0, OrMax = 0, OgMax = 0, ObMax = 0;
+
+	while(fin >> paper >> redVal >> greenVal >> blueVal)
+	{
+		if(paper == "pink"){
+			PrTotal += redVal;
+			PgTotal += greenVal;
+			PbTotal += blueVal;
+			Pcount++;
+
+			updateMinMax(redVal, PrMin, PrMax);
+			updateMinMax(greenVal, PgMin, PgMax);
+			updateMinMax(blueVal, PbMin, PbMax);
+		}
+		else {
+			OrTotal += redVal;
+			OgTotal += greenVal;
+			ObTotal += blueVal;
+			Ocount++;
+
+			updateMinMax(redVal, OrMin, OrMax);
+			updateMinMax(greenVal, OgMin, OgMax);
+			updateMinMax(blueVal, ObMin, ObMax);
+		}
+
+	}
+	
+	PrAvg = (long double) PrTotal / Pcount;
+	PgAvg = (long double) PgTotal / Pcount;
+	PbAvg = (long double) PbTotal / Pcount;
+
+	OrAvg = (long double) OrTotal / Ocount;
+	OgAvg = (long double) OgTotal / Ocount;
+	ObAvg = (long double) ObTotal / Ocount;
+
+	cout << "PINK" << endl;
+	cout << "Red Avg" << '\t' << PrAvg << '\n' << "Green Avg" << '\t' << PgAvg << '\n' << "Blue Avg" << '\t' << PbAvg << endl;
+	cout << "Red Min" << '\t' << PrMin << '\n' << "Green Min" << '\t' << PgMin << '\n' << "Blue Min" << '\t' << PbMin << endl;
+	cout << "Red Max" << '\t' << PrMax << '\n' << "Green Max" << '\t' << PgMax << '\n' << "Blue Max" << '\t' << PbMax << endl;
+
+	cout << '\n' << "ORANGE" << endl;
+	cout << "Red Avg" << '\t' << OrAvg << '\n' << "Green Avg" << '\t' << OgAvg << '\n' << "Blue Avg" << '\t' << ObAvg << endl;
+	cout << "Red Min" << '\t' << OrMin << '\n' << "Green Min" << '\t' << OgMin << '\n' << "Blue Min" << '\t' << ObMin << endl;
+	cout << "Red Max" << '\t' << OrMax << '\n' << "Green Max" << '\t' << OgMax << '\n' << "Blue Max" << '\t' << ObMax << endl;
+
+
+}
+
+void updateMinMax(long colorVal, long &min, long &max){  // Pass by reference
+
+	if(colorVal < min)
+		min = colorVal;
+	if(colorVal > max)
+		max = colorVal;
+}
+
